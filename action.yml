@@ -1,20 +1,55 @@
-name: Composite action template
+name: Docker Tag Action
 description: |
-  This action does nothing meaningful.
+  This action tags the provided image with the provided tags and publishes the result.
 
 inputs:
-  example-input:
-    description: A useless input as an example
+  image:
+    description: |
+      The docker image to tag. This should include the tag or the corresponding digest. If no tag is provided,
+      the default is "latest".
     required: true
+  tags:
+    description: A JSON array of tags to apply on the built image. Defaults to '["latest"]'
+    required: true
+    default: '["latest"]'
+  dry-run:
+    description: Whether to publish the changes or not.
+    required: false
+    default: 'false'
 outputs:
-  example-output:
-    description: You know it.
-    value: ${{ steps.generate-output.outputs.example-output }}
+  repository:
+    description: The extracted repository from the image provided.
+    value: ${{ steps.docker-tag.outputs.repository }}
+  published:
+    description: The JSON array of images corresponding to the tags provided.
+    value: ${{ steps.docker-tag.outputs.published }}
 runs:
   using: "composite"
   steps:
-    - run: echo "here is your input :${{ inputs.example-input }}."
+    - name: Docker tag
+      id: docker-tag
       shell: bash
-    - id: generate-output
-      run: echo "example-output=here is your output"
-      shell: bash
+      run: |
+        mapfile -t tags < <(echo '${{ inputs.tags }}' | jq -e -r '.[]')
+        repository=$(echo "${{ inputs.image }}" | cut -d ':' -f 1 | cut -d '@' -f 1)
+        echo "::debug::repository=${repository}"
+        
+        # Because we currently use the CLI, we have to pull the image first.
+        docker pull "${{ inputs.image }}"
+
+        declare -a published
+        for tag in "${tags[@]}"; do
+          echo "Tagging: ${{ inputs.image }} => ${repository}:${tag}"
+          docker tag "${{ inputs.image }}" "${repository}:${tag}"
+        
+          if test "${{ inputs.dry-run }}" != "true"; then
+            echo "Pushing: ${repository}:${tag}"
+            docker push "${repository}:${tag}"
+          fi
+          # We fill up published even on dry runs.
+          published+=("${repository}:${tag}")
+        done
+        
+        echo "repository=${repository}" >> "${GITHUB_OUTPUT}"
+        published_json=$(printf '%s\n' "${published[@]}" | jq -R . | jq -c -s)
+        echo "published='${published_json}'" >> "${GITHUB_OUTPUT}"

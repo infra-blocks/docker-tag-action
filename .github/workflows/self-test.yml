@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - id: composite-action
+      - id: docker-tag
         uses: ./
         with:
-          example-input: Hello?
-      - run: |
-          echo ${{ steps.composite-action.outputs.example-output }}
+          image: hello-world
+          tags: '["v1", "big-change", "bye-world"]'
+          dry-run: true
+      - name: Show outputs
+        run: |
+          echo ${{ steps.docker-tag.outputs.repository }}
+          echo ${{ steps.docker-tag.outputs.published }}
