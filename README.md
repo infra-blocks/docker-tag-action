@@ -3,8 +3,8 @@
 An action that tags a provided docker image. This action uses the Docker CLI but does not log into a registry.
 This is expected to happen before calling this action.
 
-Because we are using the CLI, we have to pull the provided image first, so the action should also have the necessary
-privileges.
+Because we are using the CLI, we may have to pull the provided image first, so the action should also have the
+necessary privileges. We first check the local docker cache to see if the image exists locally. If not, we pull.
 
 The action returns the published images with their respective tags.
 

@@ -35,7 +35,10 @@ runs:
         echo "::debug::repository=${repository}"
         
         # Because we currently use the CLI, we have to pull the image first.
-        docker pull "${{ inputs.image }}"
+        # We only do it if we don't have the image locally already, though.
+        if test -z "$(docker images -q ${{ inputs.image }})"; then
+          docker pull "${{ inputs.image }}"
+        fi
 
         declare -a published
         for tag in "${tags[@]}"; do
