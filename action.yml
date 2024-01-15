@@ -5,11 +5,10 @@ description: |
 inputs:
   image:
     description: |
-      The docker image to tag. This should include the tag or the corresponding digest. If no tag is provided,
-      the default is "latest".
+      The docker image to tag.
     required: true
   tags:
-    description: A JSON array of tags to apply on the built image. Defaults to '["latest"]'
+    description: A stringified JSON array of tags to apply on the built image. Defaults to '["latest"]'
     required: true
     default: '["latest"]'
   dry-run:
@@ -21,7 +20,7 @@ outputs:
     description: The extracted repository from the image provided.
     value: ${{ steps.docker-tag.outputs.repository }}
   published:
-    description: The JSON array of images corresponding to the tags provided.
+    description: The stringified JSON array of images corresponding to the tags provided.
     value: ${{ steps.docker-tag.outputs.published }}
 runs:
   using: "composite"
