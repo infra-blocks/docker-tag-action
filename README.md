@@ -8,6 +8,27 @@ necessary privileges. We first check the local docker cache to see if the image 
 
 The action returns the published images with their respective tags.
 
+## Inputs
+
+|  Name   | Required | Description                                                                                                                       |
+|:-------:|:--------:|-----------------------------------------------------------------------------------------------------------------------------------|
+|  image  |   true   | The docker image to tag. This should include the tag or the corresponding digest. If no tag is provided, the default is "latest". |
+|  tags   |   true   | A stringified JSON array of tags to apply on the built image. Defaults to '["latest"]'                                            |
+| dry-run |  false   | Whether to publish the changes or not.                                                                                            |
+
+## Outputs
+
+|    Name    | Description                                                              |
+|:----------:|--------------------------------------------------------------------------|
+| repository | The extracted repository from the image provided.                        |
+| published  | The stringified JSON array of images corresponding to the tags provided. |
+
+## Permissions
+
+|     Scope     | Level | Reason   |
+|:-------------:|:-----:|----------|
+| pull-requests | read  | Because. |
+
 ## Usage
 
 ### Example with ECR Public
