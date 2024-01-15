@@ -25,9 +25,7 @@ The action returns the published images with their respective tags.
 
 ## Permissions
 
-|     Scope     | Level | Reason   |
-|:-------------:|:-----:|----------|
-| pull-requests | read  | Because. |
+N/A
 
 ## Usage
 
