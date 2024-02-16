@@ -12,13 +12,15 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - id: docker-tag
+      - name: Invoke action
+        id: self-test
         uses: ./
         with:
           image: hello-world
           tags: '["v1", "big-change", "bye-world"]'
           dry-run: true
       - name: Show outputs
+        env:
+          OUTPUTS: ${{ toJson(steps.self-test.outputs) }}
         run: |
-          echo ${{ steps.docker-tag.outputs.repository }}
-          echo ${{ steps.docker-tag.outputs.published }}
+          echo "${OUTPUTS}"
