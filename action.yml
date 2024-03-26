@@ -29,6 +29,10 @@ runs:
       id: docker-tag
       shell: bash
       run: |
+        if test "${{ runner.debug }}" = "1"; then
+          set -x
+        fi
+        
         mapfile -t tags < <(echo '${{ inputs.tags }}' | jq -e -r '.[]')
         repository=$(echo "${{ inputs.image }}" | cut -d ':' -f 1 | cut -d '@' -f 1)
         echo "::debug::repository=${repository}"
