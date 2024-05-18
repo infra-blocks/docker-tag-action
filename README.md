@@ -1,7 +1,7 @@
 # docker-tag-action
-[![Release](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/git-tag-semver-from-label.yml/badge.svg)](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/git-tag-semver-from-label.yml)
-[![Self Test](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/self-test.yml/badge.svg)](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/self-test.yml)
-[![Update From Template](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/update-from-template.yml/badge.svg)](https://github.com/infrastructure-blocks/docker-tag-action/actions/workflows/update-from-template.yml)
+[![Release](https://github.com/infra-blocks/docker-tag-action/actions/workflows/git-tag-semver-from-label.yml/badge.svg)](https://github.com/infra-blocks/docker-tag-action/actions/workflows/git-tag-semver-from-label.yml)
+[![Self Test](https://github.com/infra-blocks/docker-tag-action/actions/workflows/self-test.yml/badge.svg)](https://github.com/infra-blocks/docker-tag-action/actions/workflows/self-test.yml)
+[![Update From Template](https://github.com/infra-blocks/docker-tag-action/actions/workflows/update-from-template.yml/badge.svg)](https://github.com/infra-blocks/docker-tag-action/actions/workflows/update-from-template.yml)
 
 An action that tags a provided docker image. This action uses the Docker CLI but does not log into a registry.
 This is expected to happen before calling this action.
@@ -46,7 +46,7 @@ steps:
       registry-type: public
   - name: Tag images
     id: docker-tag
-    uses: infrastructure-blocks/docker-tag-action@v1
+    uses: infra-blocks/docker-tag-action@v1
     with:
       image: public.ecr.aws/<your-org>/<your-repo>:12345
       tags: '["v1", "latest", "big-change"]'
